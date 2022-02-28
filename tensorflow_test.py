@@ -33,3 +33,20 @@ def test_train():
 
     test_df = tf.keras.utils.image_dataset_from_directory(data_dir, validation_split=0.2, subset="validation", seed=123,
         image_size=(img_height, img_width), batch_size=batch_size)
+
+    return train_df, test_df
+
+def model_building():
+    train_df, test_df = test_train()
+
+    model = tf.keras.models.Sequential([
+        tf.keras.layers.Flatten(input_shape=(150, 299)),
+        tf.keras.layers.Dense(512, activation=tf.nn.relu),
+        tf.keras.layers.Dropout(0.2),
+        tf.keras.layers.Dense(10, activation=tf.nn.softmax)
+    ]) #build model by stacking layers
+    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+        #selectop optimizer and loss function used for training
+
+    model.fit(train_df, epochs=5) #train
+    model.evaluate(test_df) #evaluate

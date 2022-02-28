@@ -1,3 +1,4 @@
 venv/
 original_dataset/
 utilities/
+.DS_Store
