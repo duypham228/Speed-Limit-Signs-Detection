@@ -36,6 +36,7 @@ for image in os.listdir(curpath):
     # Cut the image in half horizontally
     top_img = resize_img[0:150, :]
     bottom_img = resize_img[150:299, :]
+    gray_bottom = gray = cv2.cvtColor(bottom_img, cv2.COLOR_BGR2GRAY)
     filename = "crop-" + image
     # cv2.imwrite(filename, cropped_img)
     # for cnt in contours:
@@ -51,7 +52,7 @@ for image in os.listdir(curpath):
         # file = open("recognized.txt", "a")
         
     # Apply OCR on the cropped image
-    text = pytesseract.image_to_string(bottom_img)
+    text = pytesseract.image_to_string(gray_bottom)
     
     # Appending the text into file
-    print(image, text)
+    print(image, ": ", text)
