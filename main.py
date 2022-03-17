@@ -16,7 +16,7 @@ for image in os.listdir(curpath):
     # print("Before: ", img.shape)
 
     # # Convert the image to gray scale
-    # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # # Performing OTSU threshold
     # ret, thresh1 = cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY_INV)
@@ -61,8 +61,3 @@ for image in os.listdir(curpath):
     
     # Appending the text into file
     print(image, ": ", text)
-
-    # Convert image into gray scale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    cv2.imwrite("test.jpeg",gray)
