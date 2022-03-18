@@ -1,54 +1,56 @@
 from PIL import Image, ImageEnhance
 import os
 
-imageDir = os.path.join(os.getcwd(), 'images')
-
 
 # adjust contrast from 0.25 to 0.9 at intervals of 0.05
-def applyContrast(directory, image, pilImage):
+def applyContrast(directory, saveDirectory, image, pilImage):
     img = pilImage.convert('RGB')
     enhancer = ImageEnhance.Contrast(img)
     for i in range(25, 90, 5):
         adjustVal = i / 100
-        enhancer.enhance(adjustVal).save(os.path.join(directory, str(i) + 'contrast' + image))
+        enhancer.enhance(adjustVal).save(os.path.join(saveDirectory, str(i) + 'contrast' + image))
 
 
 # adjust color balance from 0.0 to 0.9 at intervals of 0.1
-def applyColor(directory, image, pilImage):
+def applyColor(directory, saveDirectory, image, pilImage):
     img = pilImage.convert('RGB')
     enhancer = ImageEnhance.Contrast(img)
     for i in range(0, 90, 10):
         adjustVal = i / 100
-        enhancer.enhance(adjustVal).save(os.path.join(directory, str(i) + 'color' + image))
+        enhancer.enhance(adjustVal).save(os.path.join(saveDirectory, str(i) + 'color' + image))
 
 
 # adjust brightness from 0.5 to 0.9 at intervals of 0.05
-def applyBrightness(directory, image, pilImage):
+def applyBrightness(directory, saveDirectory, image, pilImage):
     img = pilImage.convert('RGB')
     enhancer = ImageEnhance.Contrast(img)
     for i in range(50, 90, 5):
         adjustVal = i / 100
-        enhancer.enhance(adjustVal).save(os.path.join(directory, str(i) + 'brightness' + image))
+        enhancer.enhance(adjustVal).save(os.path.join(saveDirectory, str(i) + 'brightness' + image))
 
 
 # adjust sharpness from 0.25 to 0.9 at intervals of 0.05
-def applySharpness(directory, image, pilImage):
+def applySharpness(directory, saveDirectory, image, pilImage):
     img = pilImage.convert('RGB')
     enhancer = ImageEnhance.Contrast(img)
     for i in range(25, 90, 5):
         adjustVal = i / 100
-        enhancer.enhance(adjustVal).save(os.path.join(directory, str(i) + 'sharpness' + image))
+        enhancer.enhance(adjustVal).save(os.path.join(saveDirectory, str(i) + 'sharpness' + image))
 
 
-
-def createSyntheticDataset(directory):
+def createSyntheticDataset(directory, saveDirectory):
+    count = 0
     for image in os.listdir(directory):
         img = Image.open(os.path.join(directory, image))
-        applyContrast(directory, image, img)
-        applyColor(directory, image, img)
-        applyBrightness(directory, image, img)
-        applySharpness(directory, image, img)
+        applyContrast(directory, saveDirectory, image, img)
+        applyColor(directory, saveDirectory, image, img)
+        applyBrightness(directory, saveDirectory, image, img)
+        applySharpness(directory, saveDirectory, image, img)
+        count += 1
+        print(count)
         img.close()
 
 
-createSyntheticDataset(imageDir)
+imageDir = os.path.join(os.getcwd(), 'images')
+saveDir = os.path.join(os.getcwd(), 'all-images')
+createSyntheticDataset(imageDir, saveDir)
