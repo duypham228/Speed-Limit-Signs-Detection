@@ -28,7 +28,13 @@ def applyColor(directory):
 
 # adjust brightness from 0.3 to 0.9 at intervals of 0.05
 def applyBrightness(directory):
-    pass
+    for image in directory:
+        img = Image.open(image)
+        filename = img.filename
+        enhancer = ImageEnhance.Brightness(img)
+        for i in range(30, 90, 5):
+            adjustVal = i / 100
+            enhancer.enhance(adjustVal).save(os.path.join(directory, filename + 'brightness' + str(i)))
 
 
 # adjust sharpness from 0.25 to 0.9 at intervals of 0.05
