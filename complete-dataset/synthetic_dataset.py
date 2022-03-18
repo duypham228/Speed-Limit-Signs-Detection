@@ -11,11 +11,11 @@ def applyContrast(directory, saveDirectory, image, pilImage):
         enhancer.enhance(adjustVal).save(os.path.join(saveDirectory, str(i) + 'contrast' + image))
 
 
-# adjust color balance from 0.0 to 0.9 at intervals of 0.1
+# adjust color balance from 0.2 to 0.9 at intervals of 0.05
 def applyColor(directory, saveDirectory, image, pilImage):
     img = pilImage.convert('RGB')
     enhancer = ImageEnhance.Contrast(img)
-    for i in range(0, 90, 10):
+    for i in range(20, 90, 5):
         adjustVal = i / 100
         enhancer.enhance(adjustVal).save(os.path.join(saveDirectory, str(i) + 'color' + image))
 
