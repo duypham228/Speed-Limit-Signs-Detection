@@ -12,7 +12,7 @@ def applyContrast(directory):
         enhancer = ImageEnhance.Contrast(img)
         for i in range(25, 90, 5):
             adjustVal = i / 100
-            enhancer.enhance(adjustVal).save(os.path.join(directory, filename + 'contrast' + str(i)))
+            enhancer.enhance(adjustVal).save(os.path.join(directory, str(i) + 'contrast' + filename))
 
 
 # adjust color balance from 0.0 to 0.9 at intervals of 0.1
@@ -23,7 +23,7 @@ def applyColor(directory):
         enhancer = ImageEnhance.Color(img)
         for i in range(9, 90, 10):
             adjustVal = i / 100
-            enhancer.enhance(adjustVal).save(os.path.join(directory, filename + 'color' + str(i)))
+            enhancer.enhance(adjustVal).save(os.path.join(directory, str(i) + 'color' + filename))
 
 
 # adjust brightness from 0.3 to 0.9 at intervals of 0.05
@@ -34,7 +34,7 @@ def applyBrightness(directory):
         enhancer = ImageEnhance.Brightness(img)
         for i in range(30, 90, 5):
             adjustVal = i / 100
-            enhancer.enhance(adjustVal).save(os.path.join(directory, filename + 'brightness' + str(i)))
+            enhancer.enhance(adjustVal).save(os.path.join(directory, str(i) + 'brightness' + filename))
 
 
 # adjust sharpness from 0.25 to 0.9 at intervals of 0.05
@@ -45,4 +45,14 @@ def applySharpness(directory):
         enhancer = ImageEnhance.Contrast(img)
         for i in range(25, 90, 5):
             adjustVal = i / 100
-            enhancer.enhance(adjustVal).save(os.path.join(directory, filename + 'sharpness' + str(i)))
+            enhancer.enhance(adjustVal).save(os.path.join(directory, str(i) + 'sharpness' + filename))
+
+
+def createSyntheticDataset(directory):
+    applyBrightness(directory)
+    applyColor(directory)
+    applyContrast(directory)
+    applySharpness(directory)
+
+
+createSyntheticDataset(imageDir)
