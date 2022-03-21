@@ -24,7 +24,7 @@ for image in os.listdir(curpath):
     
 
     # Cut the image in half horizontally
-    cropped_img = resize_img[150:299, :]
+    cropped_img = resize_img[150:300, :]
     filename = "crop-" + image
     cv2.imwrite(filename, cropped_img)
     
