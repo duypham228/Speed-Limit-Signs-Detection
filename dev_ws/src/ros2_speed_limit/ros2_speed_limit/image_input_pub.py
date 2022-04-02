@@ -68,12 +68,18 @@ class Image_Input_Publisher(Node):
         index = min(partDict, key=partDict.get)
         firstDigit = blackWhite[:, 0:index+10]
         secondDigit = blackWhite[:, index+10:]
+
+        #save the images
         cv2.imwrite("first.jpeg", firstDigit)
         cv2.imwrite("second.jpeg", secondDigit)
 
+        #open the images - now pytesseract will recognize as image type
+        first_img = os.path.join(testpath, "first.jpeg")
+        second_img = os.path.join(testpath, "second.jpeg")
+
         # Apply OCR on the cropped image
-        text_left = pytesseract.image_to_string(firstDigit)
-        text_right = pytesseract.image_to_string(secondDigit)
+        text_left = pytesseract.image_to_string(first_img)
+        text_right = pytesseract.image_to_string(second_img)
         
         # Appending the text into file
         text_numerical = None #will return None value if the digit conversion cannot be completed
