@@ -1,7 +1,6 @@
 import cv2
 import pytesseract
 import os
-import numpy
 
 # images folder path
 dirname = os.getcwd()
@@ -35,13 +34,12 @@ for image in os.listdir(curpath):
     new_width = 250
     new_height = 300
     dsize = (new_width, new_height)
-    resize_img = cv2.resize(img, dsize)
-
+    resize_img = cv2.resize(gray, dsize) #using grayscale image here
 
     # Cut the image in half horizontally
     top_img = resize_img[0:150, :]
     bottom_img = resize_img[150:299, :]
-    gray_bottom = gray = cv2.cvtColor(bottom_img, cv2.COLOR_BGR2GRAY)
+    gray_bottom = cv2.cvtColor(bottom_img, cv2.COLOR_BGR2GRAY)
     filename = "crop-" + image
     # cv2.imwrite(filename, cropped_img)
     # for cnt in contours:
@@ -56,7 +54,7 @@ for image in os.listdir(curpath):
         # Open the file in append mode
         # file = open("recognized.txt", "a")
         
-    # Apply OCR on the cropped image
+    # Apply OCR on the cropped image (optical character recognition)
     text = pytesseract.image_to_string(gray_bottom)
     
     # Appending the text into file
