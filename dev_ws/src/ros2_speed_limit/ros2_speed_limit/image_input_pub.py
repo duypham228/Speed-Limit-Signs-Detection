@@ -30,17 +30,22 @@ class Image_Input_Publisher(Node):
         dirname = os.getcwd()
         curpath = os.path.join(dirname, 'images')
         testpath = os.path.join(dirname, 'testdump')
-        #for image in os.listdir(curpath):
+       
         image = "1.jpeg"
         impath = os.path.join(curpath, image)
         img = cv2.imread(impath)
         os.chdir(testpath)
+
         # Convert the image to gray scale, and cropping
-        leftBound = 15
-        rightBound = 235
-        bottomBound = 135
-        crop = img[:bottomBound, leftBound:rightBound]
-        gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
+        new_width = 250
+        new_height = 300
+        dsize = (new_width, new_height)
+        resize_img = cv2.resize(img, dsize)
+
+        # Cut the image in half horizontally
+        top_img = resize_img[0:150, :]
+        bottom_img = resize_img[150:299, :]
+        gray = cv2.cvtColor(bottom_img, cv2.COLOR_BGR2GRAY)
 
         blackWhite = numpy.array(list(map(self.mapping_helper, gray)))
         # cv2.imwrite("Test.jpeg", blackWhite)
