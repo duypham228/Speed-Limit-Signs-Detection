@@ -47,46 +47,49 @@ class Image_Input_Publisher(Node):
         bottom_img = resize_img[150:299, :]
         gray = cv2.cvtColor(bottom_img, cv2.COLOR_BGR2GRAY)
 
-        blackWhite = numpy.array(list(map(self.mapping_helper, gray)))
+        # blackWhite = numpy.array(list(map(self.mapping_helper, gray)))
         # cv2.imwrite("Test.jpeg", blackWhite)
 
         # Dense Threshold: 10%
         # denseThreshold = 20
 
         # calculate condensation of black and white
-        portion = 20
-        partDict = {}
-        for i in range(0, len(blackWhite[0]), portion):
-            part = blackWhite[:, i:i + portion]
-            blackRatio = (numpy.count_nonzero(part == 0) / (len(part) * len(part[0]))) * 100
+        # portion = 20
+        # partDict = {}
+        # for i in range(0, len(blackWhite[0]), portion):
+        #     part = blackWhite[:, i:i + portion]
+        #     blackRatio = (numpy.count_nonzero(part == 0) / (len(part) * len(part[0]))) * 100
             # print(i, blackRatio)
-            if i > portion * 2 and i < portion * 10:
-                partDict[i] = blackRatio
+            # if i > portion * 2 and i < portion * 10:
+            #     partDict[i] = blackRatio
             # name = "test" + str(i) + ".jpeg"
             # cv2.imwrite(name, part)
 
-        index = min(partDict, key=partDict.get)
-        firstDigit = blackWhite[:, 0:index+10]
-        secondDigit = blackWhite[:, index+10:]
+        # index = min(partDict, key=partDict.get)
+        # firstDigit = blackWhite[:, 0:index+10]
+        # secondDigit = blackWhite[:, index+10:]
 
         #save the images
-        cv2.imwrite("first.jpeg", firstDigit)
-        cv2.imwrite("second.jpeg", secondDigit)
+        # cv2.imwrite("first.jpeg", firstDigit)
+        # cv2.imwrite("second.jpeg", secondDigit)
 
         #open the images - now pytesseract will recognize as image type
-        first_img = os.path.join(testpath, "first.jpeg")
-        second_img = os.path.join(testpath, "second.jpeg")
+        # first_img = os.path.join(testpath, "first.jpeg")
+        # second_img = os.path.join(testpath, "second.jpeg")
 
         # Apply OCR on the cropped image
-        text_left = pytesseract.image_to_string(first_img)
-        text_right = pytesseract.image_to_string(second_img)
+        # text_left = pytesseract.image_to_string(first_img)
+        # text_right = pytesseract.image_to_string(second_img)
+        text = pytesseract.image_to_string(gray)
         
         # Appending the text into file
         text_numerical = None #will return None value if the digit conversion cannot be completed
-        if text_left.isdigit() & text_right.isdigit():
-            text_left = int(text_left)
-            text_right = int(text_right)
-            text_numerical = (text_left * 10) + text_right
+        # if text_left.isdigit() & text_right.isdigit():
+            # text_left = int(text_left)
+            # text_right = int(text_right)
+            # text_numerical = (text_left * 10) + text_right
+        if text.is_digit():
+            text_numerical = int(text)
         return text_numerical
 
     
