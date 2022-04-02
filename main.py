@@ -1,18 +1,22 @@
 import cv2
 import pytesseract
 import os
+import numpy
 
-
+# images folder path
 dirname = os.getcwd()
 curpath = os.path.join(dirname, 'images')
+# croppath = os.path.join(dirname, 'crop-images')
 
+# os.chdir(croppath)
+# Getting Each Image Path
 for image in os.listdir(curpath):
     impath = os.path.join(curpath, image)
     img = cv2.imread(impath)
-
+    # print("Before: ", img.shape)
 
     # # Convert the image to gray scale
-    # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # # Performing OTSU threshold
     # ret, thresh1 = cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY_INV)
@@ -25,6 +29,7 @@ for image in os.listdir(curpath):
     # # Finding contours
     # contours, hierarchy = cv2.findContours(dilation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
+    # current size img[300h, 250w]
     # Creating a copy of image
     # im2 = img.copy()
     new_width = 250

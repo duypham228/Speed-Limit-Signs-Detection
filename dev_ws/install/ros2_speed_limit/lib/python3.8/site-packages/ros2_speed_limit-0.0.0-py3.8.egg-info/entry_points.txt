@@ -1,0 +1,4 @@
+[console_scripts]
+listener = ros2_speed_limit.image_input_sub:main
+talker = ros2_speed_limit.image_input_pub:main
+
