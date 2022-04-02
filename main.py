@@ -1,6 +1,8 @@
-import os
 import cv2
+import pytesseract
+import os
 import numpy
+
 
 
 # Mapping function to reset 8 bits to 2 bits scale
@@ -12,7 +14,7 @@ def mapping_helper(arr):
 
 # Images Folder Path
 dirname = os.getcwd()
-curpath = os.path.join(dirname, 'crop-images')
+curpath = os.path.join(dirname, 'images')
 # croppath = os.path.join(dirname, 'crop-images')
 testpath = os.path.join(dirname, 'testdump')
 
