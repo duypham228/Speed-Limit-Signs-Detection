@@ -19,30 +19,30 @@ class Image_Input_Publisher(Node):
 
     # Mapping function to reset 8 bits to 2 bits scale
     # Black-white threshold = 175
-    def setBit(value):
+    def setBit(self, value):
         return 0 if value < 50 else 255
 
-    def mapping_helper(arr):
-        return list(map(setBit, arr))
+    def mapping_helper(self, arr):
+        return list(map(self.setBit, arr))
 
     def cropper(self):
         #images folder path
         dirname = os.getcwd()
         curpath = os.path.join(dirname, 'images')
-
+        testpath = os.path.join(dirname, 'testdump')
         #for image in os.listdir(curpath):
         image = "1.jpeg"
         impath = os.path.join(curpath, image)
         img = cv2.imread(impath)
-    
+        os.chdir(testpath)
         # Convert the image to gray scale, and cropping
         leftBound = 15
         rightBound = 235
         bottomBound = 135
         crop = img[:bottomBound, leftBound:rightBound]
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
 
-        blackWhite = numpy.array(list(map(mapping_helper, gray)))
+        blackWhite = numpy.array(list(map(self.mapping_helper, gray)))
         # cv2.imwrite("Test.jpeg", blackWhite)
 
         # Dense Threshold: 10%
@@ -63,8 +63,8 @@ class Image_Input_Publisher(Node):
         index = min(partDict, key=partDict.get)
         firstDigit = blackWhite[:, 0:index+10]
         secondDigit = blackWhite[:, index+10:]
-        # cv2.imwrite("first.jpeg", firstDigit)
-        # cv2.imwrite("second.jpeg", secondDigit)
+        cv2.imwrite("first.jpeg", firstDigit)
+        cv2.imwrite("second.jpeg", secondDigit)
 
         # Apply OCR on the cropped image
         text_left = pytesseract.image_to_string(firstDigit)
