@@ -1,4 +1,5 @@
 [console_scripts]
+classifier = ros2_speed_limit.classifier:main
+image_file = ros2_speed_limit.image_file_pub:main
 listener = ros2_speed_limit.image_input_sub:main
-talker = ros2_speed_limit.image_input_pub:main
 

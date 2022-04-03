@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Int8
+from std_msgs.msg import Int8, String
 
 import cv2
 import pytesseract
@@ -8,14 +8,28 @@ import os
 import numpy
 
 
-class Image_Input_Publisher(Node):
+class Classifier(Node):
 
+    impath = ""
     def __init__(self):
-        super().__init__('image_input_pub')
+        super().__init__('classifier')
+        self.subscription = self.create_subscription(
+            String,
+            'file_path',
+            self.listener_callback,
+            10)
+        self.subscription  # prevent unused variable warning
+
+
+
         self.publisher_ = self.create_publisher(Int8, 'speed_limit_value', 10)
         timer_period = 0.5 #seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         #self.i = 0
+
+    def listener_callback(self, msg):
+        self.get_logger().info('I heard: "%s"' % msg.data)
+        self.impath = msg.data
 
     # Mapping function to reset 8 bits to 2 bits scale
     # Black-white threshold = 175
@@ -26,14 +40,7 @@ class Image_Input_Publisher(Node):
         return list(map(self.setBit, arr))
 
     def cropper(self):
-        #images folder path
-        dirname = os.getcwd()
-        curpath = os.path.join(dirname, 'images')
-        #testpath = os.path.join(dirname, 'testdump')
-       
-        image = "1.jpeg"
-        impath = os.path.join(curpath, image)
-        img = cv2.imread(impath)
+        img = cv2.imread(self.impath)
         #os.chdir(testpath)
         #gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # Convert the image to gray scale, and cropping
@@ -115,14 +122,14 @@ class Image_Input_Publisher(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    image_input_publisher = Image_Input_Publisher()
+    classifier = Classifier()
 
-    rclpy.spin(image_input_publisher)
+    rclpy.spin(classifier)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
-    image_input_publisher.destroy_node()
+    classifier.destroy_node()
     rclpy.shutdown()
 
 
