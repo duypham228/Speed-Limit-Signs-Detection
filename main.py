@@ -4,7 +4,7 @@ import numpy
 
 
 # Mapping function to reset 8 bits to 2 bits scale
-# Blackwhtie threshold = 175
+# Blackwhite threshold = 175
 def setBit(value):
     return 255 if value < 50 else 0
 def mapping_helper(arr):
@@ -13,9 +13,9 @@ def mapping_helper(arr):
 # Images Folder Path
 dirname = os.getcwd()
 # curpath = os.path.join(dirname, 'crop-images')
-curpath = os.path.join(dirname, 'images')
+curpath = os.path.join(dirname, 'dev_ws/images')
 # croppath = os.path.join(dirname, 'crop-images')
-testpath = os.path.join(dirname, 'testdump')
+testpath = os.path.join(dirname, 'dev_ws/testdump')
 
 
 # Getting Each Image Path
