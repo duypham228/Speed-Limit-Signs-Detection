@@ -6,7 +6,7 @@ import numpy
 # Mapping function to reset 8 bits to 2 bits scale
 # Blackwhtie threshold = 175
 def setBit(value):
-    return 0 if value < 50 else 255
+    return 255 if value < 50 else 0
 def mapping_helper(arr):
     return list(map(setBit, arr))
 
