@@ -5,8 +5,11 @@ from std_msgs.msg import Int8, String
 import cv2
 import os
 import numpy
-import model
-
+import sys
+dirname = os.getcwd()
+print(dirname)
+sys.path.append(dirname)
+from model import import_model
 
 class Classifier(Node):
 
@@ -21,7 +24,7 @@ class Classifier(Node):
         self.subscription  # prevent unused variable warning
 
         self.publisher_ = self.create_publisher(Int8, 'speed_limit_value', 10)
-        timer_period = 0.5 #seconds
+        timer_period = 5 #seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         #self.i = 0
 
@@ -76,7 +79,7 @@ class Classifier(Node):
         for i in range(0, len(blackWhite[0]), portion):
             part = blackWhite[:, i:i + portion]
             whiteRatio = (len(part) - (numpy.count_nonzero(part == 0)) / (len(part)*len(part[0]))) * 100
-            # print(i, whiteRatio)
+            #print(i, whiteRatio)
             if i > portion * 2 and i < portion * 10:
                 partDict[i] = whiteRatio
             # name = "test" + str(i) + ".jpeg"
@@ -87,7 +90,7 @@ class Classifier(Node):
         secondDigit = blackWhite[:, index+10:]
 
         # retrieve the model for numerical identification
-        new_model = model.import_model()
+        new_model = import_model()
 
         #save the images
         # cv2.imwrite("first.jpeg", firstDigit)
@@ -98,11 +101,13 @@ class Classifier(Node):
         # second_img = os.path.join(testpath, "second.jpeg")
 
         # Apply OCR on the cropped image
-        first_img = firstDigit.reshape(1, 28, 28)
-        second_img = secondDigit.reshape(1, 28, 28)
+        firstDigit = cv2.resize(firstDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
+        firstDigit = firstDigit.reshape(1, 28, 28)
+        secondDigit = cv2.resize(secondDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
+        secondDigit = secondDigit.reshape(1, 28, 28)
 
-        first_result = numpy.argmax(new_model.predict(first_img)[0])
-        second_result = numpy.argmax(new_model.predict(second_img)[0])
+        first_result = numpy.argmax(new_model.predict(firstDigit)[0])
+        second_result = numpy.argmax(new_model.predict(secondDigit)[0])
         
         # Appending the text into file
         text_numerical = None #will return None value if the digit conversion cannot be completed
