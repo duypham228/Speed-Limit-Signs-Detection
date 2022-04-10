@@ -1,18 +1,18 @@
-import cv2
-import pytesseract
 import os
-
+import cv2
+import numpy
 
 
 # Mapping function to reset 8 bits to 2 bits scale
 # Blackwhtie threshold = 175
 def setBit(value):
-    return 0 if value < 50 else 255
+    return 255 if value < 50 else 0
 def mapping_helper(arr):
     return list(map(setBit, arr))
 
 # Images Folder Path
 dirname = os.getcwd()
+# curpath = os.path.join(dirname, 'crop-images')
 curpath = os.path.join(dirname, 'images')
 # croppath = os.path.join(dirname, 'crop-images')
 testpath = os.path.join(dirname, 'testdump')
@@ -20,13 +20,14 @@ testpath = os.path.join(dirname, 'testdump')
 
 # Getting Each Image Path
 # for image in os.listdir(curpath):
-impath = os.path.join(curpath, "crop-25-2.jpeg")
+impath = os.path.join(curpath, "18.jpeg")
 img = cv2.imread(impath)
 # img2 = cv2.imread("images/1.jpeg")
-# new_width = 250
-# new_height = 300
-# dsize = (new_width, new_height)
-# resize_img = cv2.resize(img2, dsize)
+new_width = 250
+new_height = 300
+dsize = (new_width, new_height)
+resize_img = cv2.resize(img, dsize)
+bottom_half = resize_img[150:300, :]
 # # print("after: ", resize_img.shape)
 
 # print(len(resize_img[:,10]))
@@ -38,7 +39,7 @@ os.chdir(testpath)
 leftBound = 15
 rightBound = 235
 bottomBound = 135
-crop = img[:bottomBound,leftBound:rightBound]
+crop = bottom_half[:bottomBound,leftBound:rightBound]
 gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
 # print(len(gray[0]))
 
@@ -55,7 +56,7 @@ portion = 20
 partDict = {}
 for i in range(0, len(blackWhite[0]), portion):
     part = blackWhite[:,i:i+portion]
-    blackRatio = (numpy.count_nonzero(part == 0) / (len(part)*len(part[0]))) * 100
+    blackRatio = (len(part) - (numpy.count_nonzero(part == 0)) / (len(part)*len(part[0]))) * 100
     print(i, blackRatio)
     if i > portion * 2 and i < portion * 10:
         partDict[i] = blackRatio
@@ -67,4 +68,3 @@ firstDigit = blackWhite[:,0:index+10]
 secondDigit = blackWhite[:, index+10:]
 cv2.imwrite("first.jpeg" ,firstDigit)
 cv2.imwrite("second.jpeg" ,secondDigit)
-
