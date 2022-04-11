@@ -4,17 +4,9 @@ from tensorflow import keras
 import ssl
 import requests
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-
-import os
-from PIL import Image
-
-
 
 def import_model():
-    new_model = tf.keras.models.load_model('saved_model/my_model')
+    new_model = tf.keras.models.load_model('dev_ws/saved_model/my_model')
 
     # mnist = tf.keras.datasets.mnist
 

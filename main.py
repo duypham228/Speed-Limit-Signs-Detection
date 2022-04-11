@@ -72,14 +72,14 @@ secondDigit = blackWhite[:, index+10:]
 
 model = import_model()
 
-os.chdir(testpath)
+# os.chdir(testpath)
 
 firstDigit = cv2.resize(firstDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
-cv2.imwrite("first_resize.jpeg", firstDigit)
+# cv2.imwrite("first_resize.jpeg", firstDigit)
 firstDigit = firstDigit.reshape(1, 28, 28)
 
 secondDigit = cv2.resize(secondDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
-cv2.imwrite("second_resize.jpeg", secondDigit)
+# cv2.imwrite("second_resize.jpeg", secondDigit)
 secondDigit = secondDigit.reshape(1, 28, 28)
 
 first_result = numpy.argmax(model.predict(firstDigit)[0])
