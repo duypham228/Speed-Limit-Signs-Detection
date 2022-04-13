@@ -20,69 +20,83 @@ testpath = os.path.join(dirname, 'dev_ws/testdump')
 
 
 # Getting Each Image Path
-# for image in os.listdir(curpath):
-impath = os.path.join(curpath, "18.jpeg")
-img = cv2.imread(impath)
-# img2 = cv2.imread("images/1.jpeg")
-new_width = 250
-new_height = 300
-dsize = (new_width, new_height)
-resize_img = cv2.resize(img, dsize)
-bottom_half = resize_img[150:300, :]
-# print("after: ", resize_img.shape)
+for image in os.listdir(curpath):
+    impath = os.path.join(curpath, image)
+    img = cv2.imread(impath)
 
-# print(len(resize_img[:,10]))
-# print("Before: ", img.shape)
+    new_width = 250
+    new_height = 300
+    dsize = (new_width, new_height)
+    resize_img = cv2.resize(img, dsize)
+    bottom_half = resize_img[150:300, :]
+    # print("after: ", resize_img.shape)
 
-# current size img[150h, 250w]
-# os.chdir(testpath)
-# Convert image into gray scale
-leftBound = 15
-rightBound = 235
-bottomBound = 135
-crop = bottom_half[:bottomBound,leftBound:rightBound]
-gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
-# print(len(gray[0]))
+    # print(len(resize_img[:,10]))
+    # print("Before: ", img.shape)
 
-blackWhite = numpy.array(list(map(mapping_helper, gray)), dtype="uint8")
-# print(list(blackWhite))
-# cv2.imwrite("Test.jpeg",blackWhite)
+    # current size img[150h, 250w]
+    # os.chdir(testpath)
+    # Convert image into gray scale
+    leftBound = 15
+    rightBound = 235
+    bottomBound = 135
+    crop = bottom_half[:bottomBound,leftBound:rightBound]
+    gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
+    # print(len(gray[0]))
 
-# print(gray[:, 20])
-# Dense Threshold: 10%
-# denseThreshold = 20
+    blackWhite = numpy.array(list(map(mapping_helper, gray)), dtype="uint8")
+    # print(list(blackWhite))
+    # cv2.imwrite("Test.jpeg",blackWhite)
 
-# calculate condensation of black and white
-portion = 20
-partDict = {}
-for i in range(0, len(blackWhite[0]), portion):
-    part = blackWhite[:,i:i+portion]
-    blackRatio = (len(part) - (numpy.count_nonzero(part == 0)) / (len(part)*len(part[0]))) * 100
-    print(i, blackRatio)
-    if i > portion * 2 and i < portion * 10:
-        partDict[i] = blackRatio
-    name = "test" + str(i) + ".jpeg"
-    # cv2.imwrite(name ,part)
+    # print(gray[:, 20])
+    # Dense Threshold: 10%
+    # denseThreshold = 20
 
-index = min(partDict, key=partDict.get)
-firstDigit = blackWhite[:,0:index+10]
-secondDigit = blackWhite[:, index+10:]
-# cv2.imwrite("first.jpeg" ,firstDigit)
-# cv2.imwrite("second.jpeg" ,secondDigit)
+    # calculate condensation of black and white
+    portion = 20
+    partDict = {}
+    for i in range(0, len(blackWhite[0]), portion):
+        part = blackWhite[:,i:i+portion]
+        blackRatio = (len(part) - (numpy.count_nonzero(part == 0)) / (len(part)*len(part[0]))) * 100
+        print(i, blackRatio)
+        if i > portion * 2 and i < portion * 10:
+            partDict[i] = blackRatio
+        # name = "test" + str(i) + ".jpeg"
+        # cv2.imwrite(name ,part)
 
-model = import_model()
+    #split the digits
+    speed_limit_file = image.split("-") #number, speed_limit.jpeg
+    speed_limit_value = speed_limit_file[1].split(".") #speed_limit, .jpeg
+    speed_limit = speed_limit_value[0] #you only want the number from the split list!
 
-# os.chdir(testpath)
+    #switch to the directory for the cropped digits
+    split_images_path = os.path.join(dirname, "dev_ws/crop-images")
+    os.chdir(split_images_path)
 
-firstDigit = cv2.resize(firstDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
-# cv2.imwrite("first_resize.jpeg", firstDigit)
-firstDigit = firstDigit.reshape(1, 28, 28)
+    #split the images
+    index = min(partDict, key=partDict.get)
+    firstDigit = blackWhite[:,0:index+10]
+    secondDigit = blackWhite[:, index+10:]
 
-secondDigit = cv2.resize(secondDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
-# cv2.imwrite("second_resize.jpeg", secondDigit)
-secondDigit = secondDigit.reshape(1, 28, 28)
+    #save each of the split images
+    first_file = speed_limit_file[0] + "-" + speed_limit[0] + ".jpeg"
+    second_file = speed_limit_file[0] + "-" + speed_limit[1] + ".jpeg"
+    cv2.imwrite(first_file, firstDigit)
+    cv2.imwrite(second_file, secondDigit)
 
-first_result = numpy.argmax(model.predict(firstDigit)[0])
-second_result = numpy.argmax(model.predict(firstDigit)[0])
+# model = import_model()
 
-print(first_result, second_result)
+# # os.chdir(testpath)
+
+# firstDigit = cv2.resize(firstDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
+# # cv2.imwrite("first_resize.jpeg", firstDigit)
+# firstDigit = firstDigit.reshape(1, 28, 28)
+
+# secondDigit = cv2.resize(secondDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
+# # cv2.imwrite("second_resize.jpeg", secondDigit)
+# secondDigit = secondDigit.reshape(1, 28, 28)
+
+# first_result = numpy.argmax(model.predict(firstDigit)[0])
+# second_result = numpy.argmax(model.predict(firstDigit)[0])
+
+# print(first_result, second_result)
