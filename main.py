@@ -13,9 +13,7 @@ def mapping_helper(arr):
 
 # Images Folder Path
 dirname = os.getcwd()
-# curpath = os.path.join(dirname, 'crop-images')
 curpath = os.path.join(dirname, 'dev_ws/images')
-# croppath = os.path.join(dirname, 'crop-images')
 testpath = os.path.join(dirname, 'dev_ws/testdump')
 
 
