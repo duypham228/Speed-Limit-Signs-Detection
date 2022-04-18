@@ -4,12 +4,16 @@ import numpy
 
 # Images Folder Path
 dirname = os.getcwd()
+orig_imgs_path = os.path.join(dirname, "dev_ws/backup-images")
 curpath = os.path.join(dirname, 'dev_ws/dataset/crop-images')
 
-for image in os.listdir(curpath):
-    impath = os.path.join(curpath, image)
+for image in os.listdir(orig_imgs_path):
+    impath = os.path.join(orig_imgs_path, image)
+    # print(impath)
     if (len(image) <= 1):
         print("Skipping this file because it is", image)
+        continue
+    elif (image == ".DS_Store"): #because macs are dumb
         continue
     img = cv2.imread(impath)
 
