@@ -36,20 +36,20 @@ class Image_File_Pub(Node):
         except:
             print("Image does not exist")
 
-        return img
+        return img, impath
 
     
     
     def timer_callback(self):
         # creating a custom message for the image
-        my_msg = self.bridge.cv2_to_imgmsg(np.array(self.path()), "bgr8")
+        img, impath = self.path()
+        my_msg = self.bridge.cv2_to_imgmsg(np.array(img), "bgr8")
         
         if my_msg is None:
             return
         #msg.data = file
         self.publisher_.publish(my_msg)
-        #self.get_logger().info('Publishing: "%d"' % msg.data)
-        self.get_logger().info("Publishing: image whatever")
+        self.get_logger().info('Publishing: "%s"' % impath)
         self.i += 1
     
 

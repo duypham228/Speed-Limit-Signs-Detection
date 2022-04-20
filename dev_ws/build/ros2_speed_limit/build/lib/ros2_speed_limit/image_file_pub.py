@@ -1,6 +1,10 @@
+#custom image source: https://answers.ros.org/question/359029/how-to-publish-batch-of-images-in-a-python-node-with-ros-2/
+
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
+from cv_bridge import CvBridge #convert cv2 to image type
+from std_msgs.msg import String #publishing single image
 
 import cv2
 import os
@@ -14,6 +18,7 @@ class Image_File_Pub(Node):
         timer_period = 5 #seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
+        self.bridge = CvBridge()
 
     def path(self):
         #images folder path
@@ -23,27 +28,28 @@ class Image_File_Pub(Node):
        
         image = dir_list[self.i]
         impath = os.path.join(curpath, image)
-        img_cv2 = cv2.imread(impath)
+    
         try:
-            img = np.asarray(img_cv2)
+            # img_cv2 = cv2.imread(impath)
+            img = cv2.imread(impath)
             
         except:
             print("Image does not exist")
 
-        return img
+        return img, impath
 
     
     
     def timer_callback(self):
-        msg = Image()
-        file = self.path()
+        # creating a custom message for the image
+        img, impath = self.path()
+        my_msg = self.bridge.cv2_to_imgmsg(np.array(img), "bgr8")
         
-        if file is None:
+        if my_msg is None:
             return
-        msg.data = file
-        self.publisher_.publish(msg)
-       # self.get_logger().info('Publishing: "%d"' % msg.data)
-        self.get_logger().info("Publishing: image whatever")
+        #msg.data = file
+        self.publisher_.publish(my_msg)
+        self.get_logger().info('Publishing: "%s"' % impath)
         self.i += 1
     
 

@@ -14,7 +14,7 @@ from model import import_model
 
 class Classifier(Node):
 
-    impath = ""
+    img = None
     def __init__(self):
         super().__init__('classifier')
         self.subscription = self.create_subscription(
@@ -28,8 +28,8 @@ class Classifier(Node):
 
 
     def listener_callback(self, msg):
-        self.get_logger().info('I heard: "%s"' % msg.data)
-        self.impath = msg.data
+        self.get_logger().info('I heard an image')
+        self.img = msg.data
 
 
     # Mapping function to reset 8 bits to 2 bits scale
@@ -47,7 +47,8 @@ class Classifier(Node):
         new_width = 250
         new_height = 300
         dsize = (new_width, new_height)
-        resize_img = cv2.resize(self.img, dsize)
+        img_arr = numpy.asarray(self.img, dtype = numpy.uint8)
+        resize_img = cv2.resize(img_arr, dsize)
 
         # Cut the image in half horizontally
         top_img = resize_img[0:150, :]
@@ -59,6 +60,7 @@ class Classifier(Node):
         rightBound = 235
         bottomBound = 135
         crop = bottom_half[:bottomBound,leftBound:rightBound]
+        print("lol surprise: ", crop.shape)
         gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
 
         # https://stackoverflow.com/questions/55087860/resize-cpp3787-error-215assertion-failed-func-0-in-function-cvhal
