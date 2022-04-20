@@ -1,3 +1,5 @@
+#image conversion source: https://stackoverflow.com/questions/26681756/how-to-convert-a-python-numpy-array-to-an-rgb-image-with-opencv-2-4
+
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Int8
@@ -54,17 +56,18 @@ class Classifier(Node):
         top_img = resize_img[0:150, :]
         bottom_half = resize_img[150:300, :]
 
-        #os.chdir(testpath)
+        testpath = os.path.join(dirname, 'test')
+        os.chdir(testpath)
         # Convert image into gray scale
         leftBound = 15
         rightBound = 235
         bottomBound = 135
         crop = bottom_half[:bottomBound,leftBound:rightBound]
-        print("lol surprise: ", crop.shape)
-        gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
+        #print("lol surprise: ", crop.shape)
+        #gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
 
         # https://stackoverflow.com/questions/55087860/resize-cpp3787-error-215assertion-failed-func-0-in-function-cvhal
-        blackWhite = numpy.array(list(map(self.mapping_helper, gray)), dtype='uint8')
+        blackWhite = numpy.array(list(map(self.mapping_helper, crop)), dtype='uint8')
         # cv2.imwrite("Test.jpeg", blackWhite)
 
         # print(gray[:, 20])
@@ -91,8 +94,8 @@ class Classifier(Node):
         new_model = import_model()
 
         #save the images
-        # cv2.imwrite("first.jpeg", firstDigit)
-        # cv2.imwrite("second.jpeg", secondDigit)
+        cv2.imwrite("first.jpeg", firstDigit)
+        cv2.imwrite("second.jpeg", secondDigit)
 
         #open the images - now pytesseract will recognize as image type
         # first_img = os.path.join(testpath, "first.jpeg")
