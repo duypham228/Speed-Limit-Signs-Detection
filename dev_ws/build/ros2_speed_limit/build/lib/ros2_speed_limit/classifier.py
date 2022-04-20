@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Int8, String
+from std_msgs.msg import Int8
+from sensor_msgs.msg import Image
 
 import cv2
 import os
@@ -17,10 +18,7 @@ class Classifier(Node):
     def __init__(self):
         super().__init__('classifier')
         self.subscription = self.create_subscription(
-            String,
-            'file_path',
-            self.listener_callback,
-            10)
+            Image, 'file', self.listener_callback, 10)
         self.subscription  # prevent unused variable warning
 
         self.publisher_ = self.create_publisher(Int8, 'speed_limit_value', 10)
@@ -45,13 +43,11 @@ class Classifier(Node):
 
 
     def cropper(self):
-        img = cv2.imread(self.impath)
-        
         # Convert the image to gray scale, and cropping
         new_width = 250
         new_height = 300
         dsize = (new_width, new_height)
-        resize_img = cv2.resize(img, dsize)
+        resize_img = cv2.resize(self.img, dsize)
 
         # Cut the image in half horizontally
         top_img = resize_img[0:150, :]

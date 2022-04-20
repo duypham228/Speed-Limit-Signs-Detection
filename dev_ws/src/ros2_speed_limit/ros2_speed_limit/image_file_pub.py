@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Image
+from sensor_msgs.msg import Image
 
 import cv2
 import os
@@ -23,10 +23,10 @@ class Image_File_Pub(Node):
        
         image = dir_list[self.i]
         impath = os.path.join(curpath, image)
-       
+        img_cv2 = cv2.imread(impath)
         try:
-            #img = np.asarray(img_cv2)
-            img = cv2.imread(impath)
+            img = np.asarray(img_cv2)
+            
         except:
             print("Image does not exist")
 
@@ -38,11 +38,12 @@ class Image_File_Pub(Node):
         msg = Image()
         file = self.path()
         
-        if file == "":
+        if file is None:
             return
         msg.data = file
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing: "%s"' % msg.data)
+       # self.get_logger().info('Publishing: "%d"' % msg.data)
+        self.get_logger().info("Publishing: image whatever")
         self.i += 1
     
 
