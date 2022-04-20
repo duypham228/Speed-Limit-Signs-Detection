@@ -1,18 +1,16 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
+from std_msgs.msg import Image
 
 import cv2
-import pytesseract
 import os
-import numpy
-
+import numpy as np
 
 class Image_File_Pub(Node):
 
     def __init__(self):
         super().__init__('image_file_pub')
-        self.publisher_ = self.create_publisher(String, 'file_path', 10)
+        self.publisher_ = self.create_publisher(Image, 'file', 10)
         timer_period = 5 #seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
@@ -24,24 +22,25 @@ class Image_File_Pub(Node):
         dir_list = os.listdir(curpath)
        
         image = dir_list[self.i]
-        impath = ""
+        impath = os.path.join(curpath, image)
        
         try:
-            impath = os.path.join(curpath, image)
+            #img = np.asarray(img_cv2)
+            img = cv2.imread(impath)
         except:
-            print("image does not exist")
+            print("Image does not exist")
 
-        return impath
+        return img
 
     
     
     def timer_callback(self):
-        msg = String()
-        file_path = self.path()
+        msg = Image()
+        file = self.path()
         
-        if file_path == "":
+        if file == "":
             return
-        msg.data = file_path
+        msg.data = file
         self.publisher_.publish(msg)
         self.get_logger().info('Publishing: "%s"' % msg.data)
         self.i += 1
