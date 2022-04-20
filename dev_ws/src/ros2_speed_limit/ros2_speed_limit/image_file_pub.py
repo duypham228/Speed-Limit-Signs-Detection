@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge #convert cv2 to image type
-from custom_batch.msg import Batch #custom message type
+from std_msgs.msg import String #publishing single image
 
 import cv2
 import os
@@ -42,10 +42,9 @@ class Image_File_Pub(Node):
     
     def timer_callback(self):
         # creating a custom message for the image
-        my_msg = Batch()
-        my_msg.data[0] = self.bridge.cv2_to_imgmsg(np.array(self.path()), "bgr8")
+        my_msg = self.bridge.cv2_to_imgmsg(np.array(self.path()), "bgr8")
         
-        if my_msg.data[0] is None:
+        if my_msg is None:
             return
         #msg.data = file
         self.publisher_.publish(my_msg)
