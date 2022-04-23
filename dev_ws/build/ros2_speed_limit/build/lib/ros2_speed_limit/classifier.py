@@ -17,13 +17,14 @@ from model import import_model
 
 class Classifier(Node):
 
-    img = None
+   
     def __init__(self):
+        self.img = None
         super().__init__('classifier')
         self.subscription = self.create_subscription(
             Image, 'file', self.listener_callback, 10)
         self.subscription  # prevent unused variable warning
-
+        self.bridge = CvBridge()
         self.publisher_ = self.create_publisher(Int8, 'speed_limit_value', 10)
         timer_period = 5 #seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
@@ -32,7 +33,7 @@ class Classifier(Node):
 
     def listener_callback(self, msg):
         self.get_logger().info('I heard an image')
-        self.img = msg.data
+        self.img = self.bridge.imgmsg_to_cv2(msg)
 
 
     # Mapping function to reset 8 bits to 2 bits scale
@@ -48,19 +49,18 @@ class Classifier(Node):
     def cropper(self):
         # Convert the image to gray scale, and cropping
         testpath = os.path.join(dirname, 'test')
-        os.chdir(testpath)
         new_width = 250
         new_height = 300
         dsize = (new_width, new_height)
-        img_arr = CvBridge.imgmsg_to_cv2(img_msg = self.img)
+  
         #img_arr = numpy.asarray(self.img, dtype = numpy.uint8)
-        resize_img = cv2.resize(img_arr, dsize)
+        resize_img = cv2.resize(self.img, dsize)
+        os.chdir(testpath)
         cv2.imwrite("resize.jpeg", resize_img)
 
         # Cut the image in half horizontally
         top_img = resize_img[0:150, :]
         bottom_half = resize_img[150:300, :]
-
 
         # Convert image into gray scale
         leftBound = 15

@@ -43,12 +43,8 @@ class Image_File_Pub(Node):
     def timer_callback(self):
         # creating a custom message for the image
         img, impath = self.path()
-        my_msg = self.bridge.cv2_to_imgmsg(np.array(img), "bgr8")
-        
-        if my_msg is None:
-            return
-        #msg.data = file
-        self.publisher_.publish(my_msg)
+       
+        self.publisher_.publish(self.bridge.cv2_to_imgmsg(img))
         self.get_logger().info('Publishing: "%s"' % impath)
         self.i += 1
     
