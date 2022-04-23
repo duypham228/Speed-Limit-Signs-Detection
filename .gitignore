@@ -8,4 +8,4 @@ __pycache__/
 dev_ws/__pycache__/model.cpython-37.pyc
 dev_ws/__pycache__/model.cpython-39.pyc
 testdump/
-.gitignore
+.vscode/settings.json
