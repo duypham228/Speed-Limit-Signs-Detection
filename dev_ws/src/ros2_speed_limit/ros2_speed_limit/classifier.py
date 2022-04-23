@@ -96,7 +96,7 @@ class Classifier(Node):
         secondDigit = blackWhite[:, index+10:]
 
         # retrieve the model for numerical identification
-        #new_model = import_model()
+        new_model = import_model()
 
         #save the images
         cv2.imwrite("first.jpeg", firstDigit)
@@ -112,16 +112,16 @@ class Classifier(Node):
         secondDigit = cv2.resize(secondDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
         secondDigit = secondDigit.reshape(1, 28, 28)
 
-        #first_result = numpy.argmax(new_model.predict(firstDigit)[0])
-        #second_result = numpy.argmax(new_model.predict(secondDigit)[0])
+        first_result = numpy.argmax(new_model.predict(firstDigit)[0])
+        second_result = numpy.argmax(new_model.predict(secondDigit)[0])
         
         # Appending the text into file
         text_numerical = None #will return None value if the digit conversion cannot be completed
         
-        # try:
-        #     text_numerical = (int(first_result) * 10) + int(second_result)
-        # except:
-        #     print("image is stupid")
+        try:
+            text_numerical = (int(first_result) * 10) + int(second_result)
+        except:
+            print("image is stupid")
 
         return text_numerical
     
