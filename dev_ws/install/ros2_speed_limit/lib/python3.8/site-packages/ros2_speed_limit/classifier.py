@@ -1,7 +1,10 @@
+#image conversion source: https://stackoverflow.com/questions/26681756/how-to-convert-a-python-numpy-array-to-an-rgb-image-with-opencv-2-4
+
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Int8
 from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
 
 import cv2
 import os
@@ -44,28 +47,33 @@ class Classifier(Node):
 
     def cropper(self):
         # Convert the image to gray scale, and cropping
+        testpath = os.path.join(dirname, 'test')
+        os.chdir(testpath)
         new_width = 250
         new_height = 300
         dsize = (new_width, new_height)
-        img_arr = numpy.asarray(self.img, dtype = numpy.uint8)
+        img_arr = CvBridge.imgmsg_to_cv2(img_msg = self.img)
+        #img_arr = numpy.asarray(self.img, dtype = numpy.uint8)
         resize_img = cv2.resize(img_arr, dsize)
+        cv2.imwrite("resize.jpeg", resize_img)
 
         # Cut the image in half horizontally
         top_img = resize_img[0:150, :]
         bottom_half = resize_img[150:300, :]
 
-        #os.chdir(testpath)
+
         # Convert image into gray scale
         leftBound = 15
         rightBound = 235
         bottomBound = 135
         crop = bottom_half[:bottomBound,leftBound:rightBound]
-        print("lol surprise: ", crop.shape)
+        #print("lol surprise: ", crop.shape)
         gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
+        cv2.imwrite("gray.jpeg", gray)
 
         # https://stackoverflow.com/questions/55087860/resize-cpp3787-error-215assertion-failed-func-0-in-function-cvhal
         blackWhite = numpy.array(list(map(self.mapping_helper, gray)), dtype='uint8')
-        # cv2.imwrite("Test.jpeg", blackWhite)
+        cv2.imwrite("Test.jpeg", blackWhite)
 
         # print(gray[:, 20])
         # Dense Threshold: 10%
@@ -88,11 +96,11 @@ class Classifier(Node):
         secondDigit = blackWhite[:, index+10:]
 
         # retrieve the model for numerical identification
-        new_model = import_model()
+        #new_model = import_model()
 
         #save the images
-        # cv2.imwrite("first.jpeg", firstDigit)
-        # cv2.imwrite("second.jpeg", secondDigit)
+        cv2.imwrite("first.jpeg", firstDigit)
+        cv2.imwrite("second.jpeg", secondDigit)
 
         #open the images - now pytesseract will recognize as image type
         # first_img = os.path.join(testpath, "first.jpeg")
@@ -104,16 +112,16 @@ class Classifier(Node):
         secondDigit = cv2.resize(secondDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
         secondDigit = secondDigit.reshape(1, 28, 28)
 
-        first_result = numpy.argmax(new_model.predict(firstDigit)[0])
-        second_result = numpy.argmax(new_model.predict(secondDigit)[0])
+        #first_result = numpy.argmax(new_model.predict(firstDigit)[0])
+        #second_result = numpy.argmax(new_model.predict(secondDigit)[0])
         
         # Appending the text into file
         text_numerical = None #will return None value if the digit conversion cannot be completed
         
-        try:
-            text_numerical = (int(first_result) * 10) + int(second_result)
-        except:
-            print("image is stupid")
+        # try:
+        #     text_numerical = (int(first_result) * 10) + int(second_result)
+        # except:
+        #     print("image is stupid")
 
         return text_numerical
     
