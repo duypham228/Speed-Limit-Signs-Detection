@@ -55,8 +55,8 @@ class Classifier(Node):
   
         #img_arr = numpy.asarray(self.img, dtype = numpy.uint8)
         resize_img = cv2.resize(self.img, dsize)
-        os.chdir(testpath)
-        cv2.imwrite("resize.jpeg", resize_img)
+        #os.chdir(testpath)
+        #cv2.imwrite("resize.jpeg", resize_img)
 
         # Cut the image in half horizontally
         top_img = resize_img[0:150, :]
@@ -69,11 +69,11 @@ class Classifier(Node):
         crop = bottom_half[:bottomBound,leftBound:rightBound]
         #print("lol surprise: ", crop.shape)
         gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
-        cv2.imwrite("gray.jpeg", gray)
+        #cv2.imwrite("gray.jpeg", gray)
 
         # https://stackoverflow.com/questions/55087860/resize-cpp3787-error-215assertion-failed-func-0-in-function-cvhal
         blackWhite = numpy.array(list(map(self.mapping_helper, gray)), dtype='uint8')
-        cv2.imwrite("Test.jpeg", blackWhite)
+        #cv2.imwrite("Test.jpeg", blackWhite)
 
         # print(gray[:, 20])
         # Dense Threshold: 10%
@@ -99,8 +99,8 @@ class Classifier(Node):
         new_model = import_model()
 
         #save the images
-        cv2.imwrite("first.jpeg", firstDigit)
-        cv2.imwrite("second.jpeg", secondDigit)
+        #cv2.imwrite("first.jpeg", firstDigit)
+        #cv2.imwrite("second.jpeg", secondDigit)
 
         #open the images - now pytesseract will recognize as image type
         # first_img = os.path.join(testpath, "first.jpeg")
