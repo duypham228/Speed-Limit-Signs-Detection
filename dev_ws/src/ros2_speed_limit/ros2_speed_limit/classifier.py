@@ -105,8 +105,8 @@ class Classifier(Node):
         cv2.imwrite("second.jpeg", secondDigit)
 
         #open the images - now model will recognize as image type
-        firstDigit = os.path.join(testpath, "first.jpeg")
-        secondDigit = os.path.join(testpath, "second.jpeg")
+        firstDigit = image.load_img(first_testpath, target_size=[28, 28])
+        secondDigit = image.load_img(second_testpath, target_size=[28, 28])
 
         # Apply OCR on the cropped image
         #image processing changes here - currently firstDigit and secondDigit are numpy.ndarray types
