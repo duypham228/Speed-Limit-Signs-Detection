@@ -6,9 +6,13 @@ from std_msgs.msg import Int8
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
+import tensorflow as tf
+from tensorflow.keras.applications.resnet50 import decode_predictions, preprocess_input
+from tensorflow.keras.preprocessing import image
+
 import cv2
 import os
-import numpy
+import numpy as np
 import sys
 dirname = os.getcwd()
 print(dirname)
@@ -72,19 +76,15 @@ class Classifier(Node):
         #cv2.imwrite("gray.jpeg", gray)
 
         # https://stackoverflow.com/questions/55087860/resize-cpp3787-error-215assertion-failed-func-0-in-function-cvhal
-        blackWhite = numpy.array(list(map(self.mapping_helper, gray)), dtype='uint8')
+        blackWhite = np.array(list(map(self.mapping_helper, gray)), dtype='uint8')
         #cv2.imwrite("Test.jpeg", blackWhite)
-
-        # print(gray[:, 20])
-        # Dense Threshold: 10%
-        # denseThreshold = 20
 
         # calculate condensation of black and white
         portion = 20
         partDict = {}
         for i in range(0, len(blackWhite[0]), portion):
             part = blackWhite[:, i:i + portion]
-            whiteRatio = (len(part) - (numpy.count_nonzero(part == 0)) / (len(part)*len(part[0]))) * 100
+            whiteRatio = (len(part) - (np.count_nonzero(part == 0)) / (len(part)*len(part[0]))) * 100
             #print(i, whiteRatio)
             if i > portion * 2 and i < portion * 10:
                 partDict[i] = whiteRatio
@@ -99,21 +99,27 @@ class Classifier(Node):
         new_model = import_model()
 
         #save the images
-        #cv2.imwrite("first.jpeg", firstDigit)
-        #cv2.imwrite("second.jpeg", secondDigit)
+        first_testpath = os.path.join(testpath, "first.jpeg")
+        second_testpath = os.path.join(testpath, "second.jpeg")
+        cv2.imwrite("first.jpeg", firstDigit)
+        cv2.imwrite("second.jpeg", secondDigit)
 
-        #open the images - now pytesseract will recognize as image type
-        # first_img = os.path.join(testpath, "first.jpeg")
-        # second_img = os.path.join(testpath, "second.jpeg")
+        #open the images - now model will recognize as image type
+        firstDigit = os.path.join(testpath, "first.jpeg")
+        secondDigit = os.path.join(testpath, "second.jpeg")
 
         # Apply OCR on the cropped image
-        firstDigit = cv2.resize(firstDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
-        firstDigit = firstDigit.reshape(1, 28, 28)
-        secondDigit = cv2.resize(secondDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
-        secondDigit = secondDigit.reshape(1, 28, 28)
+        #image processing changes here - currently firstDigit and secondDigit are numpy.ndarray types
+        first_arr = image.img_to_array(firstDigit)
+        first_digit_array = np.expand_dims(first_arr, axis=0)
+        first_preprocessed = preprocess_input(first_digit_array)
 
-        first_result = numpy.argmax(new_model.predict(firstDigit)[0])
-        second_result = numpy.argmax(new_model.predict(secondDigit)[0])
+        second_arr = image.img_to_array(secondDigit)
+        second_digit_array = np.expand_dims(second_arr, axis=0)
+        second_preprocessed = preprocess_input(second_digit_array)
+
+        first_result = np.argmax(new_model.predict(first_preprocessed))
+        second_result = np.argmax(new_model.predict(second_preprocessed))
         
         # Appending the text into file
         text_numerical = None #will return None value if the digit conversion cannot be completed
