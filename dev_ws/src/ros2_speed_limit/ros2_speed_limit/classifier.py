@@ -17,7 +17,7 @@ import sys
 dirname = os.getcwd()
 print(dirname)
 sys.path.append(dirname)
-from model import import_model
+# from model import import_model
 
 class Classifier(Node):
 
@@ -96,7 +96,8 @@ class Classifier(Node):
         secondDigit = blackWhite[:, index+10:]
 
         # retrieve the model for numerical identification
-        new_model = import_model()
+        # new_model = import_model()
+        new_model = tf.keras.models.load_model('saved_model/my_model')
 
         #save the images
         first_testpath = os.path.join(testpath, "first.jpeg")

@@ -6,7 +6,7 @@ import requests
 
 
 def import_model():
-    new_model = tf.keras.models.load_model('dev_ws/saved_model/my_model')
+    new_model = tf.keras.models.load_model('saved_model/my_model')
 
     # mnist = tf.keras.datasets.mnist
 
