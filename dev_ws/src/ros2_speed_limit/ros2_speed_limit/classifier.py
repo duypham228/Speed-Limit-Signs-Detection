@@ -43,7 +43,7 @@ class Classifier(Node):
     # Mapping function to reset 8 bits to 2 bits scale
     # Black-white threshold = 175
     def setBit(self, value):
-        return 255 if value < 50 else 0
+        return 255 if value < 85 else 0
 
 
     def mapping_helper(self, arr):
