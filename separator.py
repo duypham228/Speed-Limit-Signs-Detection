@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.applications.resnet50 import decode_predictions, preprocess_input
+from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.preprocessing import image
 
 def setBit(value):
@@ -11,7 +11,7 @@ def setBit(value):
 def mapping_helper(arr):
     return list(map(setBit, arr))
 
-img = "dev_ws/images/1-40.jpeg"
+img = "dev_ws/images/25-25.jpeg"
 
 # Images Folder Path
 dirname = os.getcwd()
@@ -61,7 +61,7 @@ firstDigit = blackWhite[:, 0:index+10]
 secondDigit = blackWhite[:, index+10:]
 
 # retrieve the model for numerical identification
-new_model = tf.keras.models.load_model('dev_ws/saved_model/my_model')
+new_model = tf.keras.models.load_model('dev_ws/saved_model/my_model.h5')
 
 #save the images
 testpath = os.path.join(dirname, 'dev_ws/test')
@@ -75,7 +75,11 @@ cv2.imwrite(second_testpath, secondDigit)
 # firstDigit = cv2.resize(firstDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
 # firstDigit = tf.convert_to_tensor(firstDigit, dtype=tf.float32)
 
-# secondDigit = cv2.resize(secondDigit, (28, 28), interpolation=cv2.INTER_CUBIC)
+#viewing the resized digit of 0.
+img_convert = cv2.imread(second_testpath)
+secondDigit_reize = cv2.resize(img_convert, (28, 28), interpolation=cv2.INTER_CUBIC)
+second_testpath_reize = os.path.join(testpath, "second_resize.jpeg")
+cv2.imwrite(second_testpath_reize, secondDigit_reize)
 # secondDigit = tf.convert_to_tensor(secondDigit, dtype=tf.float32)
 
 firstDigit = image.load_img(first_testpath, target_size=[28, 28])

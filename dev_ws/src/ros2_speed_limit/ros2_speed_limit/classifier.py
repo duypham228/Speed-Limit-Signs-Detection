@@ -96,14 +96,14 @@ class Classifier(Node):
         secondDigit = blackWhite[:, index+10:]
 
         # retrieve the model for numerical identification
-        # new_model = import_model()
-        new_model = tf.keras.models.load_model('saved_model/my_model')
+        # https://stackoverflow.com/questions/68173923/error-userobject-object-has-no-attribute-predict
+        new_model = tf.keras.models.load_model('saved_model/my_model.h5')
 
         #save the images
         first_testpath = os.path.join(testpath, "first.jpeg")
         second_testpath = os.path.join(testpath, "second.jpeg")
-        cv2.imwrite("first.jpeg", firstDigit)
-        cv2.imwrite("second.jpeg", secondDigit)
+        cv2.imwrite(first_testpath, firstDigit)
+        cv2.imwrite(second_testpath, secondDigit)
 
         #open the images - now model will recognize as image type
         firstDigit = image.load_img(first_testpath, target_size=[28, 28])
