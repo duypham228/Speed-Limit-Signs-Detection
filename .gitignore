@@ -1,5 +1,12 @@
-venv/
-original_dataset/
-utilities/
-.idea/
 dev_ws/log/
+dev_ws/.DS_Store
+.DS_Store
+dev_ws/src/.DS_Store
+dev_ws/src/ros2_speed_limit/.DS_Store
+dev_ws/src/ros2_speed_limit/ros2_speed_limit/.DS_Store
+__pycache__/
+dev_ws/__pycache__/model.cpython-37.pyc
+dev_ws/__pycache__/model.cpython-39.pyc
+testdump/
+.vscode/settings.json
+.vscode/

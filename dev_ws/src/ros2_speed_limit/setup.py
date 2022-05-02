@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'talker = ros2_speed_limit.image_input_pub:main',
+            'image_file = ros2_speed_limit.image_file_pub:main',
+            'classifier = ros2_speed_limit.classifier:main',
             'listener = ros2_speed_limit.image_input_sub:main',
         ],
     },
