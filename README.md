@@ -23,7 +23,7 @@ In this project, Robotic Operating Systems 2 (ROS2) is used to take in images of
 
 5. Open a NEW Terminal window, and navigate to the dev_ws directory. This will be terminal "alpha".
 
-6. Run the command: ** . install/setup.bash**
+6. Run the command: **. install/setup.bash**
 * Note: no terminal output will be produced.
 
 7. Repeat steps 5 and 6 once more, which will open up a third Terminal window. This third terminal will be terminal "beta".
