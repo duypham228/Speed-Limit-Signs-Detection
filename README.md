@@ -40,5 +40,5 @@ This next part is optional, but may be wanting to be done if you wish to see wha
 
 10. Complete steps 5 and 6 once again. This fourth terminal window will be called "delta".
 
-11. Take terminal delta and run this command: **ros2 run ros2_speed_limit subscriber**. 
+11. Take terminal delta and run this command: **ros2 run ros2_speed_limit listener**. 
 * You will now be able to see what the classifier is publishing, outside of the classifier's connected terminal itself. 
