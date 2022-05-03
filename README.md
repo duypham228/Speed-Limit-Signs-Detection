@@ -37,6 +37,7 @@ In this project, Robotic Operating Systems 2 (ROS2) is used to take in images of
 * This will produce terminal output indicating the numerical value detected, or a print-out statement if no image could be found.
 
 This next part is optional, but may be wanting to be done if you wish to see what the classifier publishes. 
+
 10. Complete steps 5 and 6 once again. This fourth terminal window will be called "delta".
 
 11. Take terminal delta and run this command: **ros2 run ros2_speed_limit subscriber**. 
