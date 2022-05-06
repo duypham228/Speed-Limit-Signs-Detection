@@ -1,12 +1,13 @@
-# 5 Min Demo Video
-https://drive.google.com/file/d/15Bq_CXZ5x15e30Evbwzj7eBD6U8ZRtAZ/view?usp=sharing
-The link above is will take you to the team drive where you can download the video
-NOTE: You can only have access to this link by using your Tamu account
 # Capstone_Speed_Limit_Classification
 
 Created by Duy Pham, Ian Stephenson, Sophia Stutes, and Bao Vo for CSCE 482 Capstone, Spring 2022.
 
 AutoDrive Challenge 2022
+
+## 5 Minute Demo Video
+[![DEMO](https://drive.google.com/file/d/15Bq_CXZ5x15e30Evbwzj7eBD6U8ZRtAZ/view?usp=sharing)](https://drive.google.com/file/d/15Bq_CXZ5x15e30Evbwzj7eBD6U8ZRtAZ/view?usp=sharing)
+The link above will take you to the team drive, where you can watch the video.
+NOTE: You can only have access to this link by using your TAMU-affiliated account.
 
 ## How it works
 In this project, Robotic Operating Systems 2 (ROS2) is used to take in images of speed limit signs, classify them, and then produce output for the user to view, which will contain the digit classified by the model.
