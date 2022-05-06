@@ -6,7 +6,7 @@ AutoDrive Challenge 2022
 
 ## 5 Minute Demo Video
 [![DEMO](https://drive.google.com/file/d/15Bq_CXZ5x15e30Evbwzj7eBD6U8ZRtAZ/view?usp=sharing)](https://drive.google.com/file/d/15Bq_CXZ5x15e30Evbwzj7eBD6U8ZRtAZ/view?usp=sharing)
-The link above will take you to the team drive, where you can watch the video.
+This embedded link will take you to the Team drive, where you can watch the demo video.
 NOTE: You can only have access to this link by using your TAMU-affiliated account.
 
 ## How it works
